@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, } from 'typeorm';
+import { Category } from './category.entity';
 
 @Entity()
 export class User {
@@ -10,4 +11,13 @@ export class User {
 
   @Column()
   password: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @CreateDateColumn()
+  updatedAt: Date;
+
+  @OneToMany(() => Category, (category) => category.user)
+  categories: Category[];
 }

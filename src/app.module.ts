@@ -9,20 +9,18 @@ import { AuthModule } from './Modules/Auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: () => ({
+      imports: [ConfigModule.forRoot( )],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'postgres',
-        password: 'Unbiliever13',
-        database: 'coplasca-store',
+        host: process.env.POSTGRES_HOST,
+        port: configService.get('POSTGRES_PORT'),
+        username: process.env.POSTGRES_USERNAME,
+        password: process.env.POSTGRES_PASSWORD,
+        database: process.env.POSTGRES_DB,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-
-
         synchronize: true,
       }),
+      inject: [ConfigService]
     }),
     UserModule, AuthModule
   ],

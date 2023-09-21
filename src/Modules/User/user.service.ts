@@ -4,6 +4,7 @@ import { User } from '../../Entity/user.entity';
 import { UserCreateDto } from '../../Entity/dto/userCreateDto';
 import { UserUpdateDto } from '../../Entity/dto/userUpdateDto';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt'
 
 
 @Injectable()
@@ -54,5 +55,18 @@ export class UserService {
     } catch {
       throw new HttpException('user not found', 404);
     }
+  }
+
+  async validateUser(email:string, password: string){
+    const user = await this.userRepository.findOneBy({email})
+    if(user){}
+
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, userId: number) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.userRepository.update(userId, {
+      currentHashedRefreshToken
+    });
   }
 }

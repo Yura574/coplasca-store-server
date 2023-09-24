@@ -40,7 +40,8 @@ export class AuthService {
     const hashPassword = await bcrypt.hash(registrationData.password, 10);
     try {
       const createdUser = await this.userService.createUser({ ...registrationData, password: hashPassword });
-      createdUser.password = undefined;
+      // createdUser.password = undefined;
+
       return createdUser;
     } catch (error) {
       throw new HttpException(`${error.response}`, HttpStatus.BAD_REQUEST);

@@ -60,6 +60,4 @@ export class AuthController {
 
     @Post('activate')
     async activateLink(){}
-
-
 }

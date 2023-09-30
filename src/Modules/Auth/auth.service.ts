@@ -40,6 +40,8 @@ export class AuthService {
     const hashPassword = await bcrypt.hash(registrationData.password, 10);
     try {
       const createdUser = await this.userService.createUser({ ...registrationData, password: hashPassword });
+
+      console.log('created user', createdUser);
       // createdUser.password = undefined;
 
       return createdUser;
@@ -62,7 +64,6 @@ export class AuthService {
 
   async refreshToken(user: any) {
     const payload = { email: user.email };
-
     return {
       refresh_token: await this.jwtService.signAsync(payload, { expiresIn: '7d' }),
     };

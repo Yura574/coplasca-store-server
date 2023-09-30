@@ -11,13 +11,6 @@ export class User {
 
     @Column()
     password: string;
-    @Column({default: false})
-    isActivated: boolean
-    @Column()
-    activationLink: string
-
-    @Column({nullable: true})
-    public currentHashedRefreshToken?: string;
 
     @OneToOne(()=> Token)
     @JoinColumn()

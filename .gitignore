@@ -4,7 +4,7 @@
 
 node_modules
 .idea
-.dist
+dist/
 
 .env.production
 .env.*.testing

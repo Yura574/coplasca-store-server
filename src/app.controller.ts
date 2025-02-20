@@ -9,6 +9,6 @@ export class AppController {
   @Get()
   getHello(): string {
 
-    return process.env.MONGO_URI || 'test ';
+    return this.appService.getHello();
   }
 }

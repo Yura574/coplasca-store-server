@@ -15,7 +15,7 @@ import {UserRepository} from "./features/users/infracture/user.repository";
         configModule,
         MongooseModule.forRootAsync({
                 useFactory: () => {
-                    return {uri: 'mongodb+srv://yura574:unbiliever13@cluster0.gkvsq.mongodb.net/development?retryWrites=true&w=majority&appName=Cluster0', autoIndex: true}
+                    return {uri: process.env.MONGO_URI, autoIndex: true}
                 }
             }
         ),

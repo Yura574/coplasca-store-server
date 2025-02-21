@@ -10,3 +10,5 @@ dist/
 .env.*.testing
 /.env
 /.env.testing.local
+/.env.development
+/.env.testing

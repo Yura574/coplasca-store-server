@@ -22,6 +22,7 @@ async function bootstrap() {
     }));
 
     app.useGlobalFilters(new HttpExceptionsFilter());
+    app.enableCors()
 
    useContainer(app.select(AppModule), {fallbackOnErrors: true} )
 

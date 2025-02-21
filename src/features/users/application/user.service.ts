@@ -12,7 +12,6 @@ export class UserService {
 
     async createUser(data: CreateUserInputModel){
         const newUser: CreateNewUserType = new NewUser(data)
-        console.log(newUser)
         const isUnique = await this.userRepository.isUniqueUser(newUser.email, newUser.login)
         if(isUnique.length> 0){
             throw new BadRequestException(isUnique)

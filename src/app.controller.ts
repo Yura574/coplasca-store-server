@@ -1,14 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import {Controller, Delete, Get, HttpCode, HttpStatus} from '@nestjs/common';
 import { AppService } from './app.service';
 import * as process from "node:process";
 
-@Controller()
+@Controller('testing')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-
-    return this.appService.getHello();
+  @Delete('all-data')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteAllData(){
+    return await this.appService.deleteAllData()
   }
 }

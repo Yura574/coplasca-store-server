@@ -9,13 +9,22 @@ import {User, userSchema} from "./features/users/domain/user.entity";
 import {UserController} from "./features/users/api/user.controller";
 import {UserService} from "./features/users/application/user.service";
 import {UserRepository} from "./features/users/infracture/user.repository";
+import {appSettings} from "./settings/appSettings";
+import {MongoMemoryServer} from "mongodb-memory-server";
 
 @Module({
     imports: [
         configModule,
         MongooseModule.forRootAsync({
-                useFactory: () => {
-                    return {uri: process.env.MONGO_URI, autoIndex: true}
+                useFactory: async () => {
+                    let uri = appSettings.api.MONGO_URI;
+                    // console.log('uri', process.env.NODE_ENV)
+                    if (appSettings.env.isTesting()) {
+                        let mongo = await MongoMemoryServer.create();
+                        console.log(mongo.getUri())
+                       uri = mongo.getUri();
+                    }
+                    return  {uri} ;
                 }
             }
         ),

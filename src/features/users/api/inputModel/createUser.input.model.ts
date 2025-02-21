@@ -24,6 +24,6 @@ export class CreateUserInputModel {
     @IsString()
     @Transform(({value}) => typeof value === "string" ? value.trim() : value)
     @IsNotEmpty({message: 'Password is required'})
-    @Length(8,30, {message: 'Name length should min 8 symbols, max 30 symbols'})
+    @Length(8,30, {message: 'Password length should min 8 symbols, max 30 symbols'})
     password: string;
 }

@@ -2,30 +2,14 @@ import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 import * as process from "node:process";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
-import {BadRequestException, ValidationPipe} from "@nestjs/common";
-import {useContainer} from "class-validator";
-import {HttpExceptionsFilter} from "./infrastructure/exceptions-filters/exceptions";
-import {validationError} from "./infrastructure/utils/validationError";
+import {applyAppSetting} from "./settings/apply-app-setting";
 
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    app.useGlobalPipes(new ValidationPipe({
-        transform: true,
-        whitelist: true,
-        stopAtFirstError: true,
-        exceptionFactory: (errors) => {
-            const errorsMessages = validationError(errors);
-            throw new BadRequestException(errorsMessages);
-        }
-    }));
 
-    app.useGlobalFilters(new HttpExceptionsFilter());
-    app.enableCors()
-
-   useContainer(app.select(AppModule), {fallbackOnErrors: true} )
-
+applyAppSetting(app)
     const config = new DocumentBuilder()
         .setTitle('title for swagger')
         .setDescription('description for swagger')

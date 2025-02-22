@@ -7,16 +7,6 @@ import { UserController } from './features/users/api/user.controller';
 import { UsersQueryRepository } from './features/users/infrastructure/usersQuery.repository';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionsFilter } from './infrastructure/exception-filters/exeptions';
-import { Blog, BlogSchema } from './features/blogs/domain/blog.entity';
-import { BlogsController } from './features/blogs/api/blogs.controller';
-import { BlogsRepository } from './features/blogs/infrastructure/blogs.repository';
-import { BlogsService } from './features/blogs/application/blogs.service';
-import { BlogsQueryRepository } from './features/blogs/infrastructure/blogsQuery.repository';
-import { Post, PostSchema } from './features/posts/domain/post.entity';
-import { PostController } from './features/posts/api/post.controller';
-import { PostRepository } from './features/posts/infrastructure/postRepository';
-import { PostService } from './features/posts/application/postService';
-import { PostQueryRepository } from './features/posts/infrastructure/postQueryRepository';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MailerModule } from '@nestjs-modules/mailer';
@@ -24,7 +14,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailService } from './features/auth/application/email.service';
 import { appSettings } from './settings/appSettings';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { IpRestrictionMiddleware } from './infrastructure/middlewares/ipRestriction.middleware';
 import { AuthController } from './features/auth/api/models/auth.controller';
 import { AuthService } from './features/auth/application/auth.service';
 import { FallbackController } from './fallback.controller';
@@ -36,38 +25,14 @@ import { LoginUseCase } from './features/auth/application/useCases/login.use-cas
 import { EmailConfirmationUseCase } from './features/auth/application/useCases/emailConfirmation.use-case';
 import { RegistrationUseCase } from './features/auth/application/useCases/registration.use-case';
 import { NewPasswordUseCase } from './features/auth/application/useCases/newPassword.use-case';
-import { CommentRepository } from './features/comments/infrastructure/comment.repository';
-import { CommentService } from './features/comments/application/comment.service';
-import { Comment, CommentSchema } from './features/comments/domain/comment.entity';
-import { CommentsController } from './features/comments/api/comments.controller';
-import { CommentQueryRepository } from './features/comments/infrastructure/commentQuery.repository';
-import { ResendingEmailUseCase } from './features/auth/application/useCases/resendingEmail.use-case';
-import { BlogIdValidator } from './infrastructure/validators/blogId.validator';
-import { PostIdValidator } from './infrastructure/validators/postId.validator';
-import { CreateBlogUseCase } from './features/blogs/application/useCases/createBlog.use-case';
-import { InterlayerNotice } from './infrastructure/interlayers/interlayerNotice';
+import {ResendingEmailUseCase} from "./features/auth/application/useCases/resendingEmail.use-case";
 
 const usersProviders: Provider[] = [
   UsersRepository,
   UsersService,
   UsersQueryRepository
 ];
-const blogsProviders: Provider[] = [
-  BlogsRepository,
-  BlogsService,
-  BlogsQueryRepository
-];
-const postsProviders: Provider[] = [
-  PostRepository,
-  PostService,
-  PostQueryRepository
-];
 
-const commentsProviders: Provider[] = [
-  CommentRepository,
-  CommentQueryRepository,
-  CommentService
-];
 const recoveryPasswordProviders: Provider[] = [
   RecoveryPasswordService,
   RecoveryPasswordRepository
@@ -82,10 +47,6 @@ const authUseCases: Provider[] = [
   ResendingEmailUseCase
 ];
 
-const blogUseCases: Provider[] = [
-  CreateBlogUseCase
-]
-
 @Module({
   imports: [
 
@@ -99,15 +60,11 @@ const blogUseCases: Provider[] = [
             let mongo = await MongoMemoryServer.create();
             uri = mongo.getUri();
           }
-          console.log(uri);
           return  {uri} ;
         }
       }
     ),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: Blog.name, schema: BlogSchema }]),
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
-    MongooseModule.forFeature([{ name: Comment.name, schema: CommentSchema }]),
     MongooseModule.forFeature([{ name: RecoveryPassword.name, schema: RecoveryPasswordSchema }]),
 
     MailerModule.forRootAsync({
@@ -128,9 +85,6 @@ const blogUseCases: Provider[] = [
   ],
   controllers: [
     UserController,
-    BlogsController,
-    PostController,
-    CommentsController,
     AppController,
     AuthController,
     FallbackController
@@ -138,16 +92,10 @@ const blogUseCases: Provider[] = [
   providers: [
     AppService,
     ...usersProviders,
-    ...blogsProviders,
-    ...postsProviders,
-    ...commentsProviders,
     EmailService,
     ...recoveryPasswordProviders,
     AuthService,
     ...authUseCases,
-    ...blogUseCases,
-    BlogIdValidator,
-    PostIdValidator,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionsFilter
@@ -162,8 +110,5 @@ const blogUseCases: Provider[] = [
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(IpRestrictionMiddleware)
-      .forRoutes('auth');
   }
 }

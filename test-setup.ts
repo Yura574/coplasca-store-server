@@ -48,7 +48,6 @@ export class TestSetup {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        // MongooseModule.forRoot(uri, { dbName: 'test-db' }),
         AppModule
       ]
     })

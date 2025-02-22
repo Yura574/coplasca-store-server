@@ -1,71 +1,84 @@
 import * as process from 'node:process';
 
-process.env.NODE_ENV = 'TESTING';
+process.env.ENV = 'TESTING';
 
-import {MongoMemoryServer} from 'mongodb-memory-server';
-import {INestApplication} from '@nestjs/common';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import {  INestApplication } from '@nestjs/common';
 
 
-import mongoose, {Connection} from 'mongoose';
-import {Test, TestingModule} from '@nestjs/testing';
-import {AppModule} from './src/app.module';
-import {getConnectionToken, MongooseModule} from '@nestjs/mongoose';
-import * as request from 'supertest';
-import {applyAppSetting} from './src/settings/apply-app-setting';
+import mongoose, { Connection } from 'mongoose';
+import { Test, TestingModule } from '@nestjs/testing';
+import { AppModule } from './src/app.module';
+import { getConnectionToken, MongooseModule } from '@nestjs/mongoose';
+import request from 'supertest';
+import { EmailService } from './src/features/auth/application/email.service';
+import { EmailServiceMock } from './test/mockServices/emailServiceMock';
+import { RegistrationMockUseCase } from './test/mockServices/registrationMockService';
+import { RegistrationUseCase } from './src/features/auth/application/useCases/registration.use-case';
+import { RecoveryPasswordUseCase } from './src/features/auth/application/useCases/recoveryPassword.use-case';
+import { RecoveryPasswordMockUseCase } from './test/mockServices/recoveryPasswordMockUseCase';
+import { applyAppSetting } from './src/settings/apply-app-setting';
 
 export let testApp: INestApplication;
 export let testSetup: TestSetup;
 
 
 export const initializeTestSetup = async () => {
-    testSetup = new TestSetup();
-    testApp = await testSetup.init();
+  testSetup = new TestSetup();
+  testApp = await testSetup.init();
 };
 export const closeTest = async () => {
-    await testSetup.close();
+  await testSetup.close();
 };
 
 export const clearDatabase = async () => {
-    await testSetup.clearDatabase();
+  await testSetup.clearDatabase();
 };
 
 export class TestSetup {
 
-    public app: INestApplication;
-    public mongod: MongoMemoryServer;
-    public mongoConnection: Connection;
+  public app: INestApplication;
+  public mongod: MongoMemoryServer;
+  public mongoConnection: Connection;
 
-    async init() {
-        this.mongod = await MongoMemoryServer.create();
-        const uri = this.mongod.getUri();
-        await mongoose.connect(uri);
+  async init() {
+    this.mongod = await MongoMemoryServer.create();
+    const uri = this.mongod.getUri();
+    await mongoose.connect(uri);
 
-        const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [
-                AppModule
-            ]
-        })
-            .compile();
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [
+        // MongooseModule.forRoot(uri, { dbName: 'test-db' }),
+        AppModule
+      ]
+    })
+      .overrideProvider(EmailService)
+      .useClass(EmailServiceMock)
+      .overrideProvider(RegistrationUseCase)
+      .useClass(RegistrationMockUseCase)
+      .overrideProvider(RecoveryPasswordUseCase)
+      .useClass(RecoveryPasswordMockUseCase)
+      .compile();
 
-        this.app = moduleFixture.createNestApplication();
+    this.app = moduleFixture.createNestApplication();
 
-        applyAppSetting(this.app);
-        await this.app.init();
+    applyAppSetting(this.app);
+    await this.app.init();
 
 
-        this.mongoConnection = moduleFixture.get<Connection>(getConnectionToken());
-        return this.app;
-    }
+    this.mongoConnection = moduleFixture.get<Connection>(getConnectionToken());
+    return this.app;
+  }
 
-    async close() {
-        await this.mongoConnection.dropDatabase();
-        await this.mongoConnection.close();
-        await this.mongod.stop();
-        await this.app.close();
-    }
+  async close() {
+    await this.mongoConnection.dropDatabase();
+    await this.mongoConnection.close();
+    await this.mongod.stop();
+    await this.app.close();
+  }
 
-    async clearDatabase() {
-        await request(this.app.getHttpServer())
-            .delete('/testing/all-data');
-    }
+  async clearDatabase() {
+    await request(this.app.getHttpServer())
+      .delete('/testing/all-data');
+  }
 }

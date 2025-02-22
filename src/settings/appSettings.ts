@@ -32,7 +32,6 @@ export class EnvironmentSettings {
   }
 
   isTesting() {
-    // console.log('setting',this.env)
     return this.env === 'TESTING';
   }
 }
@@ -50,7 +49,7 @@ class APISettings {
   public readonly APP_PORT: number;
 
   // Database
-  public readonly MONGO_URI: string;
+  public readonly MONGO_CONNECTION_URI: string;
   public readonly MONGO_CONNECTION_URI_FOR_TESTS: string;
 
   constructor(private readonly envVariables: EnvironmentVariable) {
@@ -58,8 +57,8 @@ class APISettings {
     this.APP_PORT = this.getNumberOrDefault(this.envVariables.APP_PORT as string, 5000);
 
     // Database
-    this.MONGO_URI =
-      this.envVariables.MONGO_URI ?? 'mongodb://localhost/nest';
+    this.MONGO_CONNECTION_URI =
+      this.envVariables.MONGO_CONNECTION_URI ?? 'mongodb://localhost/nest';
     // this.MONGO_CONNECTION_URI_FOR_TESTS =
     //   this.envVariables.MONGO_CONNECTION_URI_FOR_TESTS ?? 'mongodb://localhost/test';
   }
@@ -76,10 +75,9 @@ class APISettings {
   }
 }
 
-console.log(process.env.NODE_ENV )
 const env = new EnvironmentSettings(
-  (Environments.includes((process.env.NODE_ENV as string)?.trim())
-    ? (process.env.NODE_ENV as string).trim()
+  (Environments.includes((process.env.ENV as string)?.trim())
+    ? (process.env.ENV as string).trim()
     : 'DEVELOPMENT') as EnvironmentsTypes
 );
 

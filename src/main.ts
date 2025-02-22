@@ -1,28 +1,18 @@
-import {NestFactory} from '@nestjs/core';
-import {AppModule} from './app.module';
-import * as process from "node:process";
-import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
-import {applyAppSetting} from "./settings/apply-app-setting";
-
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { applyAppSetting } from './settings/apply-app-setting';
+import { ValidationPipe } from '@nestjs/common';
+import { appSettings } from './settings/appSettings';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-
-
-applyAppSetting(app)
-    const config = new DocumentBuilder()
-        .setTitle('title for swagger')
-        .setDescription('description for swagger')
-        .setVersion('1.0')
-        .build()
-    const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, documentFactory);
-
-    await app.listen(process.env.PORT || 3000, () => {
-        console.log(process.env.NODE_ENV);
-        console.log(process.env.PORT);
-        console.log(process.env.MONGO_URI);
-    });
+  const app = await NestFactory.create(AppModule);
+  app.enableCors();
+  // app.useGlobalPipes(new ValidationPipe());
+  applyAppSetting(app);
+  await app.listen(appSettings.api.APP_PORT, () => {
+    console.log('App starting listen port: ', appSettings.api.APP_PORT);
+    console.log('ENV: ', appSettings.env.getEnv());
+  });
 }
 
 bootstrap();

@@ -3,7 +3,6 @@ import {MongooseModule} from '@nestjs/mongoose';
 import {UsersRepository} from './features/users/infrastructure/users.repository';
 import {UsersService} from './features/users/application/users.service';
 import {User, UserSchema} from './features/users/domain/user.entity';
-import {UserController} from './features/users/api/user.controller';
 import {UsersQueryRepository} from './features/users/infrastructure/usersQuery.repository';
 import {APP_FILTER} from '@nestjs/core';
 import {HttpExceptionsFilter} from './infrastructure/exception-filters/exeptions';
@@ -31,6 +30,8 @@ import {SaleRepository} from "./features/sales/infractructure/sale.repository";
 import {CreateSaleUsecase} from "./features/sales/application/usecases/createSale.usecase";
 import {GetSaleByIdUsecase} from "./features/sales/application/usecases/getSaleById.usecase";
 import {SalesController} from "./features/sales/api/sales.controller";
+import {UserController} from "./features/users/api/user.controller";
+import {GetSalesUsecase} from "./features/sales/application/usecases/getSales.usecase";
 
 const usersProviders: Provider[] = [
     UsersRepository,
@@ -52,10 +53,11 @@ const authUseCases: Provider[] = [
     ResendingEmailUseCase
 ];
 
-const SaleUsecases: Provider[] = [
+const saleUsecases: Provider[] = [
     SaleRepository,
     CreateSaleUsecase,
     GetSaleByIdUsecase,
+    GetSalesUsecase
 
 ]
 
@@ -102,26 +104,23 @@ const SaleUsecases: Provider[] = [
         UserController,
         AppController,
         AuthController,
-        FallbackController,
         SalesController,
+
+        //обязательно последний
+        FallbackController,
     ],
     providers: [
         AppService,
         ...usersProviders,
-        EmailService,
         ...recoveryPasswordProviders,
-        AuthService,
         ...authUseCases,
+        ...saleUsecases,
+        AuthService,
+        EmailService,
         {
             provide: APP_FILTER,
             useClass: HttpExceptionsFilter
         }
-        // {
-        //   provide: BlogIdValidator,
-        //   useFactory: (blogModel: Model<Blog>) => new BlogIdValidator(blogModel),
-        //   inject: [getModelToken(Blog.name)], // Важно!
-        // },
-
     ],
 })
 export class AppModule {

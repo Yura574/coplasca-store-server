@@ -3,6 +3,7 @@ import {InjectModel} from "@nestjs/mongoose";
 import {Sale, SaleDocument} from "../domain/sale.entity";
 import {Model} from "mongoose";
 import {CreateNewSale} from "../utils/createNewSale";
+import {QueryGetSalesType} from "../api/models/types/querySalesType";
 
 
 @Injectable()

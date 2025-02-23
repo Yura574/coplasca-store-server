@@ -3,6 +3,7 @@ import {SaleRepository} from "../../infractructure/sale.repository";
 import {CreateNewSale} from "../../utils/createNewSale";
 import {HydratedDocument} from "mongoose";
 import {SaleDocument} from "../../domain/sale.entity";
+import {CreateNewSaleInputModel} from "../../api/models/input/createNewSale.input.model";
 
 
 @Injectable()
@@ -10,8 +11,9 @@ export class CreateSaleUsecase {
     constructor(private saleRepository: SaleRepository) {
     }
 
-    async createSale(dto: CreateNewSale) {
-        const sale: HydratedDocument<SaleDocument> = await this.saleRepository.createSale(dto)
+    async createSale(userId: string, dto: CreateNewSaleInputModel) {
+        const newSale = new CreateNewSale(userId, dto)
+        const sale: HydratedDocument<SaleDocument> = await this.saleRepository.createSale(newSale)
         return sale.id
     }
 }

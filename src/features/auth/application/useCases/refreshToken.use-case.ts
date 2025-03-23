@@ -10,9 +10,6 @@ export class RefreshTokenUseCase {
 
   async execute(user: any) {
 
-    console.log(user)
-    // const findUser
-    console.log(user)
     const accessPayload = {
       userId: user.userId,
       email: user.email,

@@ -35,7 +35,7 @@ describe('test for POST sales', () => {
     it('get sales for user', async () => {
         await salesTestManagers.createTestSales(token)
        const res =  await salesTestManagers.getSales(token)
-
+        console.log(res.items[0].saleDataInfo)
     });
 
 

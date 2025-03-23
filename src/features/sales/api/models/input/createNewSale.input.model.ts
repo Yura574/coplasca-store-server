@@ -1,45 +1,16 @@
-import {IsOptional, IsString} from "class-validator";
-import {Transform} from "class-transformer";
+import {IsArray, IsOptional, IsString, ValidateNested} from "class-validator";
+import {Transform, Type} from "class-transformer";
 import {BadRequestException} from "@nestjs/common";
 import {ErrorMessageType} from "../../../../../infrastructure/exception-filters/exeptions";
+import {SaleDataInfoType} from "../types/saleDataInfoType";
 
 
 export class CreateNewSaleInputModel {
-    @IsOptional()
-    @IsString()
-    @Transform(({value}) => {
-        if (typeof value !== "string") {
-            throw new BadRequestException([{message: 'Scent should be string', field: 'userId'}] as ErrorMessageType[]);
-        }
-        return value.trim()
-    })
-    scent?: string
 
-    @IsOptional()
-    @IsString()
-    @Transform(({value}) => {
-        if (typeof value !== "string") {
-            throw new BadRequestException([{
-                message: 'Category should be string',
-                field: 'userId'
-            }] as ErrorMessageType[]);
-        }
-        return value.trim()
-    })
-    category?: string
-
-    @IsOptional()
-    @IsString()
-    @Transform(({value}) => {
-        if (typeof value !== "string") {
-            throw new BadRequestException([{
-                message: 'Volume should be a string',
-                field: 'userId'
-            }] as ErrorMessageType[]);
-        }
-        return value.trim()
-    })
-    volume?: string
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => SaleDataInfoType)
+    saleDataInfo: SaleDataInfoType[]
 
     @IsOptional()
     @IsString()

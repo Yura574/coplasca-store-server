@@ -34,16 +34,13 @@ export class GetSalesUsecase {
             return {
                 id: sale.id,
                 userId: sale.userId,
-                scent: sale.scent,
-                category: sale.category,
-                volume: sale.volume,
+                saleDataInfo: sale.saleDataInfo,
                 price: sale.price,
                 paymentMethod: sale.paymentMethod,
                 pointOfSale: sale.pointOfSale,
                 createdAt: sale.createdAt,
             }
         })
-
 
         return {
             page: pageNumber,

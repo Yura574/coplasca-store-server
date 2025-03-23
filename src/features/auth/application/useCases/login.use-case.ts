@@ -39,8 +39,8 @@ export class LoginUseCase {
       deviceId: v4()
     };
     return {
-      accessCookie: jwt.sign(accessPayload, process.env.ACCESS_SECRET as string, {expiresIn: '1m'}),
-      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, {expiresIn: '60m'})
+      accessCookie: jwt.sign(accessPayload, process.env.ACCESS_SECRET as string, {expiresIn: '15m'}),
+      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, {expiresIn: '30d'})
 
     };
   }

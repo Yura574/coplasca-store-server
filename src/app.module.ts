@@ -76,11 +76,9 @@ const saleUsecases: Provider[] = [
                     let uri: string = ''
                     if(appSettings.env.isDevelopment()){
                         uri = appSettings.api.MONGO_CONNECTION_URI_FOR_DEVELOP
-                        console.log(uri)
                     }
                     if(appSettings.env.isProduction()){
                         uri = appSettings.api.MONGO_CONNECTION_URI
-                        console.log(uri)
                     }
                     if (appSettings.env.isTesting()) {
                         let mongo = await MongoMemoryServer.create();

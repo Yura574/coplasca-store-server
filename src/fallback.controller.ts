@@ -6,7 +6,6 @@ import { Request, Response } from 'express';
 export class FallbackController {
   @All('*')
   handleFallback(@Req() req: Request, @Res() res: Response) {
-    console.log(123)
     res.status(404).json({
       statusCode: 404,
       message: 'Route not found',

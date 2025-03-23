@@ -94,7 +94,6 @@ export class AuthController {
     @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(AuthGuard)
     async logout(@Res({passthrough: true}) res: Response): Promise<void> {
-        console.log(123)
         res.clearCookie('refreshToken');
     }
 
@@ -137,7 +136,6 @@ export class AuthController {
     @UseGuards(RefreshTokenGuard)
     @Get(authEndPoints.ME)
     async me(@Req() req: RequestType<{}, {}, {}>) {
-        console.log('me')
         const user = req.user;
         if (!user) throw new UnauthorizedException();
 

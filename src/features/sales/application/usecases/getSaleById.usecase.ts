@@ -14,13 +14,11 @@ export class GetSaleByIdUsecase {
     async getSaleById(saleId: string) {
         const sale: HydratedDocument<SaleDocument> | null = await this.saleRepository.getSaleById(saleId)
         if(!sale) throw new NotFoundException("Sale not found");
-        const {category, volume, price, scent, id, pointOfSale, userId, paymentMethod, createdAt} = sale
+        const {saleDataInfo, price, id, pointOfSale, userId, paymentMethod, createdAt} = sale
         const returnedSale: SaleOutputModel = {
             id,
             userId,
-            scent,
-            category,
-            volume,
+            saleDataInfo,
             price,
             paymentMethod,
             pointOfSale,

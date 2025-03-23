@@ -49,4 +49,12 @@ export class SalesTestManager {
             .expect(status)
         return res.body
     }
+
+    async deleteSale(token: string, saleId: string, status = HttpStatus.NO_CONTENT) {
+        const res = await request(this.app.getHttpServer())
+            .delete(`/sales/${saleId}`)
+            .auth(token, {type: 'bearer'})
+            .expect(status)
+
+    }
 }

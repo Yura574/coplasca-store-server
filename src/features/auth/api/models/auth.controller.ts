@@ -65,7 +65,6 @@ export class AuthController {
     @Post(authEndPoints.REGISTRATION)
     @HttpCode(HttpStatus.NO_CONTENT)
     async registration(@Body() body: UserInputModel): Promise<UserViewModel | void> {
-        console.log(body)
         return await this.registrationUseCase.execution(body);
     }
 
@@ -81,7 +80,6 @@ export class AuthController {
     async login(@Body() body: LoginInputModel,
                 @Res({passthrough: true}) res: Response): Promise<LoginOutputModel> {
         const {loginOrEmail, password} = body;
-        console.log(loginOrEmail)
         const cookie = await this.loginUseCase.execute(loginOrEmail, password);
 
         const accessToken = {

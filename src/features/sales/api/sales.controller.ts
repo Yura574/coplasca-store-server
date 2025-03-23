@@ -1,4 +1,15 @@
-import {Body, Controller, Get, Post, Req, UnauthorizedException, UseGuards} from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Post,
+    Req,
+    UnauthorizedException,
+    UseGuards
+} from "@nestjs/common";
 import {CreateNewSaleInputModel} from "./models/input/createNewSale.input.model";
 import {AuthGuard} from "../../../infrastructure/guards/auth.guard";
 import {CreateSaleUsecase} from "../application/usecases/createSale.usecase";
@@ -8,6 +19,8 @@ import {RequestType} from "../../1_commonTypes/commonTypes";
 import {GetSalesUsecase} from "../application/usecases/getSales.usecase";
 import {ReturnViewModel} from "../../1_commonTypes/returnViewModel";
 import {QueryGetSalesType} from "./models/types/querySalesType";
+import {DeleteSaleParamsType} from "./models/types/deleteSaleParams";
+import {DeleteSaleUsecase} from "../application/usecases/deleteSale.usecase";
 
 
 @Controller('sales')
@@ -15,6 +28,7 @@ export class SalesController {
     constructor(private createSaleUsecase: CreateSaleUsecase,
                 private getSaleByIdUsecase: GetSaleByIdUsecase,
                 private getSalesUsecase: GetSalesUsecase,
+                private deleteSalesUsecase: DeleteSaleUsecase,
     ) {
     }
 
@@ -31,6 +45,7 @@ export class SalesController {
         return await this.getSaleByIdUsecase.getSaleById(saleId)
     }
 
+
     @UseGuards(AuthGuard)
     @Get()
     async getSales(@Req() req: RequestType<{}, {}, QueryGetSalesType>): Promise<ReturnViewModel<SaleOutputModel[]>> {
@@ -43,5 +58,10 @@ export class SalesController {
 
     }
 
-
+    @UseGuards(AuthGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Delete(':id')
+    async deleteSale(@Req() req: RequestType<DeleteSaleParamsType, {}, {}>) {
+        return await this.deleteSalesUsecase.deleteSale(req.params.id)
+    }
 }

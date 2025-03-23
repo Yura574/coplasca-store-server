@@ -33,6 +33,7 @@ import {SalesController} from "./features/sales/api/sales.controller";
 import {UserController} from "./features/users/api/user.controller";
 import {GetSalesUsecase} from "./features/sales/application/usecases/getSales.usecase";
 import {RefreshTokenUseCase} from "./features/auth/application/useCases/refreshToken.use-case";
+import {DeleteSaleUsecase} from "./features/sales/application/usecases/deleteSale.usecase";
 
 const usersProviders: Provider[] = [
     UsersRepository,
@@ -59,7 +60,8 @@ const saleUsecases: Provider[] = [
     SaleRepository,
     CreateSaleUsecase,
     GetSaleByIdUsecase,
-    GetSalesUsecase
+    GetSalesUsecase,
+    DeleteSaleUsecase,
 
 ]
 
@@ -84,7 +86,6 @@ const saleUsecases: Provider[] = [
                         let mongo = await MongoMemoryServer.create();
                         uri = mongo.getUri();
                     }
-                    console.log(uri)
                     return {uri};
                 }
             }

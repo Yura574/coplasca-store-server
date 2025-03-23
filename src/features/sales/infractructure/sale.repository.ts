@@ -20,12 +20,16 @@ export class SaleRepository {
         }
     }
 
-    async getSaleById(id: string) {
+    async getSaleById(saleId: string) {
         try {
-            return await this.saleModel.findOne({_id: id})
+            return await this.saleModel.findOne({_id: saleId})
         } catch (error) {
             console.log(error)
             throw new Error('Something went wrong')
         }
+    }
+
+    async deleteSale(saleId: string) {
+        return this.saleModel.deleteOne({_id: saleId});
     }
 }

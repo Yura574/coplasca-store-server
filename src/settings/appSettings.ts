@@ -13,7 +13,6 @@ export const Environments = ['DEVELOPMENT', 'STAGING', 'PRODUCTION', 'TESTING'];
 
 export class EnvironmentSettings {
   constructor(private env: EnvironmentsTypes) {
-    console.log(env)
   }
 
   getEnv() {

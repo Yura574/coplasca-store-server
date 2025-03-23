@@ -34,6 +34,11 @@ import {UserController} from "./features/users/api/user.controller";
 import {GetSalesUsecase} from "./features/sales/application/usecases/getSales.usecase";
 import {RefreshTokenUseCase} from "./features/auth/application/useCases/refreshToken.use-case";
 import {DeleteSaleUsecase} from "./features/sales/application/usecases/deleteSale.usecase";
+import {CategoryRepository} from "./features/reference-data/infractructure/category.repository";
+import {CreateCategoryUsecase} from "./features/reference-data/application/usecases/createCategory.usecase";
+import {GetAllCategoriesUsecase} from "./features/reference-data/application/usecases/getAllCategories.usecase";
+import {Category, CategorySchema} from "./features/reference-data/domain/category.entity";
+import {CategoryController} from "./features/reference-data/api/category.controller";
 
 const usersProviders: Provider[] = [
     UsersRepository,
@@ -62,7 +67,11 @@ const saleUsecases: Provider[] = [
     GetSaleByIdUsecase,
     GetSalesUsecase,
     DeleteSaleUsecase,
-
+]
+const referenceDataUsecases: Provider[] = [
+    CategoryRepository,
+    CreateCategoryUsecase,
+   GetAllCategoriesUsecase
 ]
 
 @Module({
@@ -92,6 +101,7 @@ const saleUsecases: Provider[] = [
             {name: User.name, schema: UserSchema},
             {name: Sale.name, schema: SaleSchema},
             {name: RecoveryPassword.name, schema: RecoveryPasswordSchema},
+            {name: Category.name, schema: CategorySchema},
         ]),
 
         MailerModule.forRootAsync({
@@ -115,6 +125,7 @@ const saleUsecases: Provider[] = [
         AppController,
         AuthController,
         SalesController,
+        CategoryController,
 
         //обязательно последний
         FallbackController,
@@ -125,6 +136,7 @@ const saleUsecases: Provider[] = [
         ...recoveryPasswordProviders,
         ...authUseCases,
         ...saleUsecases,
+        ...referenceDataUsecases,
         AuthService,
         EmailService,
         {

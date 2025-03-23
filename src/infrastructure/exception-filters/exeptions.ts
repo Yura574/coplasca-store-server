@@ -29,13 +29,14 @@ export class HttpExceptionsFilter implements ExceptionFilter {
       };
       const responseBody: any = exception.getResponse();
       if (Array.isArray(responseBody.message)) {
+
         responseBody.message.forEach(
           (e: { message: string; field: string }) => {
             errorsResponse.errorsMessages.push(e);
           }
         );
       } else {
-        errorsResponse.errorsMessages.push(responseBody);
+        errorsResponse.errorsMessages.push({message:responseBody.message, field: ''});
       }
       response.status(status).json(errorsResponse);
     }

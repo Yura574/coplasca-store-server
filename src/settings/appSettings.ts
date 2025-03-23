@@ -13,6 +13,7 @@ export const Environments = ['DEVELOPMENT', 'STAGING', 'PRODUCTION', 'TESTING'];
 
 export class EnvironmentSettings {
   constructor(private env: EnvironmentsTypes) {
+    console.log(env)
   }
 
   getEnv() {
@@ -50,7 +51,7 @@ class APISettings {
 
   // Database
   public readonly MONGO_CONNECTION_URI: string;
-  public readonly MONGO_CONNECTION_URI_FOR_TESTS: string;
+  public readonly MONGO_CONNECTION_URI_FOR_DEVELOP: string;
 
   constructor(private readonly envVariables: EnvironmentVariable) {
     // Application
@@ -59,8 +60,8 @@ class APISettings {
     // Database
     this.MONGO_CONNECTION_URI =
       this.envVariables.MONGO_CONNECTION_URI ?? 'mongodb://localhost/nest';
-    // this.MONGO_CONNECTION_URI_FOR_TESTS =
-    //   this.envVariables.MONGO_CONNECTION_URI_FOR_TESTS ?? 'mongodb://localhost/test';
+    this.MONGO_CONNECTION_URI_FOR_DEVELOP =
+      this.envVariables.MONGO_CONNECTION_URI_FOR_DEVELOP ?? 'mongodb://localhost/test';
   }
 
 

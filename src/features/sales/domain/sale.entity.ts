@@ -6,19 +6,19 @@ export type SaleDocument = HydratedDocument<Sale>
 
 @Schema()
 export class Sale {
-    @Prop({ required: true })
+    @Prop()
     userId: string
 
-    @Prop({ required: true })
+    @Prop()
     scent: string
 
-    @Prop({ required: true })
+    @Prop()
     category: string
 
-    @Prop({ required: true })
+    @Prop()
     volume: string
 
-    @Prop({ required: true })
+    @Prop()
     price: string
 
     @Prop()
@@ -27,7 +27,7 @@ export class Sale {
     @Prop()
     pointOfSale: string
 
-    @Prop({ required: true })
+    @Prop()
     createdAt: string
 
 }

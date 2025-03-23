@@ -32,6 +32,7 @@ import {GetSaleByIdUsecase} from "./features/sales/application/usecases/getSaleB
 import {SalesController} from "./features/sales/api/sales.controller";
 import {UserController} from "./features/users/api/user.controller";
 import {GetSalesUsecase} from "./features/sales/application/usecases/getSales.usecase";
+import {RefreshTokenUseCase} from "./features/auth/application/useCases/refreshToken.use-case";
 
 const usersProviders: Provider[] = [
     UsersRepository,
@@ -50,7 +51,8 @@ const authUseCases: Provider[] = [
     LoginUseCase,
     RecoveryPasswordUseCase,
     NewPasswordUseCase,
-    ResendingEmailUseCase
+    ResendingEmailUseCase,
+    RefreshTokenUseCase
 ];
 
 const saleUsecases: Provider[] = [
@@ -69,11 +71,20 @@ const saleUsecases: Provider[] = [
         }),
         MongooseModule.forRootAsync({
                 useFactory: async () => {
-                    let uri = appSettings.api.MONGO_CONNECTION_URI;
+                    let uri: string = ''
+                    if(appSettings.env.isDevelopment()){
+                        uri = appSettings.api.MONGO_CONNECTION_URI_FOR_DEVELOP
+                        console.log(uri)
+                    }
+                    if(appSettings.env.isProduction()){
+                        uri = appSettings.api.MONGO_CONNECTION_URI
+                        console.log(uri)
+                    }
                     if (appSettings.env.isTesting()) {
                         let mongo = await MongoMemoryServer.create();
                         uri = mongo.getUri();
                     }
+                    console.log(uri)
                     return {uri};
                 }
             }

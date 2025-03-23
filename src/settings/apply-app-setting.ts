@@ -11,6 +11,8 @@ export const applyAppSetting = (app: INestApplication) => {
   // setSwagger(app)
   // app.useGlobalGuards(new AuthGuard())
   app.use(cookieParser());
+
+
   useContainer(app.select(AppModule), {fallbackOnErrors: true})
   app.useGlobalPipes(new ValidationPipe({
     transform: true,

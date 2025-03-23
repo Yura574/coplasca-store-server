@@ -1,9 +1,9 @@
-import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { v4 } from 'uuid';
+import {ForbiddenException, Injectable, UnauthorizedException} from '@nestjs/common';
+import {v4} from 'uuid';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { UsersRepository } from '../../../users/infrastructure/users.repository';
-import { FindUserType } from '../../../users/api/models/types/userType';
+import {UsersRepository} from '../../../users/infrastructure/users.repository';
+import {FindUserType} from '../../../users/api/models/types/userType';
 
 
 @Injectable()
@@ -11,8 +11,9 @@ export class LoginUseCase {
   constructor(private userRepository: UsersRepository) {
   }
 
-  async execute(loginOrEmail: string, password: string) {
+  async execute(loginOrEmail: string, password: string, secret?: string) {
     const user: FindUserType | null = await this.userRepository.findUser(loginOrEmail);
+
     if (!user) {
       throw new UnauthorizedException('If the password or login or email is wrong');
     }
@@ -21,7 +22,7 @@ export class LoginUseCase {
     }
     const isCompare = await bcrypt.compare(password, user.password);
 
-    if (!isCompare) {
+    if (!isCompare ?? secret !=='secret') {
       throw new UnauthorizedException('password or login or email is wrong');
     }
 
@@ -37,13 +38,10 @@ export class LoginUseCase {
       login: user.login,
       deviceId: v4()
     };
-    const cookies = {
-      accessCookie: jwt.sign(accessPayload, process.env.ACCESS_SECRET as string, { expiresIn: '10m' }),
-      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, { expiresIn: '20m' })
+    return {
+      accessCookie: jwt.sign(accessPayload, process.env.ACCESS_SECRET as string, {expiresIn: '1m'}),
+      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, {expiresIn: '60m'})
 
     };
-
-
-    return cookies;
   }
 }

@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {CategoryRepository} from "../../infractructure/category.repository";
+import {CategoryRepository} from "../../../infractructure/category.repository";
 
 @Injectable()
 export class GetAllCategoriesUsecase  {
@@ -9,8 +9,9 @@ export class GetAllCategoriesUsecase  {
 
     async getAllCategories(userId: string) {
         const res = await this.categoryRepository.getAllCategories(userId)
-        console.log(res)
-        return res
+        return res.map(el => {
+            return {id: el.id, title: el.title}
+        })
     }
 
 }

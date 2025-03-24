@@ -18,8 +18,8 @@ export class CategoryRepository {
         return this.categoryModel.findOne({_id: id});
     }
 
-    async getCategoryByName(category: string) {
-        return this.categoryModel.findOne({category});
+    async getCategoryByName(title: string) {
+        return this.categoryModel.findOne({title});
     }
 
     async getAllCategories(userId: string) {

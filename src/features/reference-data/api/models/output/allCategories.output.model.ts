@@ -1,4 +1,4 @@
 export class CategoryOutputModel {
     id: string
-    category: string
+    title: string
 }

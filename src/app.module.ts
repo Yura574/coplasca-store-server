@@ -35,10 +35,17 @@ import {GetSalesUsecase} from "./features/sales/application/usecases/getSales.us
 import {RefreshTokenUseCase} from "./features/auth/application/useCases/refreshToken.use-case";
 import {DeleteSaleUsecase} from "./features/sales/application/usecases/deleteSale.usecase";
 import {CategoryRepository} from "./features/reference-data/infractructure/category.repository";
-import {CreateCategoryUsecase} from "./features/reference-data/application/usecases/createCategory.usecase";
-import {GetAllCategoriesUsecase} from "./features/reference-data/application/usecases/getAllCategories.usecase";
+import {CreateCategoryUsecase} from "./features/reference-data/application/usecases/category/createCategory.usecase";
+import {
+    GetAllCategoriesUsecase
+} from "./features/reference-data/application/usecases/category/getAllCategories.usecase";
 import {Category, CategorySchema} from "./features/reference-data/domain/category.entity";
 import {CategoryController} from "./features/reference-data/api/category.controller";
+import {ScentController} from "./features/reference-data/api/scent.controller";
+import {ScentRepository} from "./features/reference-data/infractructure/scent.repository";
+import {CreateScentUsecase} from "./features/reference-data/application/usecases/scent/createScent.usecase";
+import {GetAllScentsUsecase} from "./features/reference-data/application/usecases/scent/getAllScents.usecase";
+import {Scent, ScentSchema} from "./features/reference-data/domain/scent.entity";
 
 const usersProviders: Provider[] = [
     UsersRepository,
@@ -71,7 +78,11 @@ const saleUsecases: Provider[] = [
 const referenceDataUsecases: Provider[] = [
     CategoryRepository,
     CreateCategoryUsecase,
-   GetAllCategoriesUsecase
+    GetAllCategoriesUsecase,
+
+    ScentRepository,
+    CreateScentUsecase,
+    GetAllScentsUsecase,
 ]
 
 @Module({
@@ -83,10 +94,10 @@ const referenceDataUsecases: Provider[] = [
         MongooseModule.forRootAsync({
                 useFactory: async () => {
                     let uri: string = ''
-                    if(appSettings.env.isDevelopment()){
+                    if (appSettings.env.isDevelopment()) {
                         uri = appSettings.api.MONGO_CONNECTION_URI_FOR_DEVELOP
                     }
-                    if(appSettings.env.isProduction()){
+                    if (appSettings.env.isProduction()) {
                         uri = appSettings.api.MONGO_CONNECTION_URI
                     }
                     if (appSettings.env.isTesting()) {
@@ -102,6 +113,7 @@ const referenceDataUsecases: Provider[] = [
             {name: Sale.name, schema: SaleSchema},
             {name: RecoveryPassword.name, schema: RecoveryPasswordSchema},
             {name: Category.name, schema: CategorySchema},
+            {name: Scent.name, schema: ScentSchema},
         ]),
 
         MailerModule.forRootAsync({
@@ -126,6 +138,7 @@ const referenceDataUsecases: Provider[] = [
         AuthController,
         SalesController,
         CategoryController,
+        ScentController,
 
         //обязательно последний
         FallbackController,

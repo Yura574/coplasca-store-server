@@ -1,7 +1,7 @@
-import {CategoryRepository} from "../../infractructure/category.repository";
+import {CategoryRepository} from "../../../infractructure/category.repository";
 import {BadRequestException, Injectable, InternalServerErrorException} from "@nestjs/common";
-import { CategoryOutputModel} from "../../api/models/output/allCategories.output.model";
-import {ErrorMessageType} from "../../../../infrastructure/exception-filters/exeptions";
+import { CategoryOutputModel} from "../../../api/models/output/allCategories.output.model";
+import {ErrorMessageType} from "../../../../../infrastructure/exception-filters/exeptions";
 
 
 @Injectable()
@@ -9,17 +9,17 @@ export class CreateCategoryUsecase {
     constructor(private categoryRepository: CategoryRepository) {
     }
 
-    async createCategory(userId: string, category: string): Promise<CategoryOutputModel | null> {
-        const findCategory = await this.categoryRepository.getCategoryByName(category);
+    async createCategory(userId: string, title: string): Promise<CategoryOutputModel | null> {
+        const findCategory = await this.categoryRepository.getCategoryByName(title);
         if (findCategory) throw new BadRequestException([{
             message: 'Category already exists',
             field: 'category'
         }] as ErrorMessageType[]);
         try {
-            const res = await this.categoryRepository.createCategory({userId, category})
+            const res = await this.categoryRepository.createCategory({userId, title})
             return {
                 id: res.id,
-                category: res.category
+                title: res.title
 
             }
         } catch (error) {

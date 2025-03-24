@@ -8,12 +8,13 @@ export class NewCategoryInputModel {
     @IsString()
     @Transform(({value}) => {
         if (typeof value !== "string") {
+            console.log(value)
             throw new BadRequestException([{
-                message: 'Price should be a string',
-                field: 'userId'
+                message: 'Title should be a string',
+                field: 'title'
             }] as ErrorMessageType[]);
         }
         return value.trim()
     })
-    category: string
+    title: string
 }

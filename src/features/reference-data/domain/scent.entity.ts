@@ -2,12 +2,12 @@ import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
 import {HydratedDocument} from "mongoose";
 
 
-export type CategoryDocument = HydratedDocument<Category>
+export type ScentDocument = HydratedDocument<Scent>
 
 
 
 @Schema()
-export class Category {
+export class Scent {
 
     @Prop()
     userId: string
@@ -18,4 +18,4 @@ export class Category {
 }
 
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const ScentSchema = SchemaFactory.createForClass(Scent);

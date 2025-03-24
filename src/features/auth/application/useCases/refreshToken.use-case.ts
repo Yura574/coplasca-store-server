@@ -23,8 +23,8 @@ export class RefreshTokenUseCase {
       deviceId: user.deviceId,
     };
     return {
-      accessCookie: jwt.sign(accessPayload, process.env.ACCESS_SECRET as string, {expiresIn: '10s'}),
-      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, {expiresIn: '60m'})
+      accessCookie: jwt.sign(accessPayload, process.env.ACCESS_SECRET as string, {expiresIn: '15m'}),
+      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, {expiresIn: '30d'})
 
     };
   }

@@ -22,6 +22,9 @@ export class GetSalesUsecase {
             } : {
             userId
             };
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1-е число текущего месяца
+        const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
         const skip = (+pageNumber - 1) * +pageNumber;
         const sort: any = {};
         sort[sortBy] = sortDirection === 'asc' ? 1 : -1;
@@ -29,7 +32,7 @@ export class GetSalesUsecase {
         const salesCount = await this.saleModel.countDocuments(searchQuery);
         const pagesCount = Math.ceil(salesCount / pageSize);
 
-        const sales = await this.saleModel.find(searchQuery).sort(sort).skip(skip).limit(+pageSize);
+        const sales = await this.saleModel.find({...searchQuery, createdAt: {$gte: startOfMonth, $lt: startOfNextMonth}, pointOfSale: ''}).sort(sort).skip(skip);
         const returnItems: SaleOutputModel[] = sales.map((sale: SaleDocument): SaleOutputModel => {
             return {
                 id: sale.id,

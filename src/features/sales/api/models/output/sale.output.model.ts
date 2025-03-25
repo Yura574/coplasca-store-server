@@ -8,5 +8,5 @@ export type SaleOutputModel = {
     price: string
     paymentMethod: string
     pointOfSale: string
-    createdAt: string
+    createdAt: Date
 }

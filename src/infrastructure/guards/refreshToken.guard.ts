@@ -17,8 +17,7 @@ export class RefreshTokenGuard implements CanActivate {
     ): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest<RequestType<any, any, any>>();
         const refreshToken = request.cookies['refreshToken']
-        const payload1 = jwt.verify(refreshToken, process.env.REFRESH_SECRET as string) as JwtPayloadType;
-
+        const payload1 = jwt.decode(refreshToken) as JwtPayloadType;
         try {
             const payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET as string) as JwtPayloadType;
             request.user = {

@@ -35,7 +35,7 @@ export class Sale {
     pointOfSale: string
 
     @Prop()
-    createdAt: string
+    createdAt: Date
 
 }
 // @Schema()

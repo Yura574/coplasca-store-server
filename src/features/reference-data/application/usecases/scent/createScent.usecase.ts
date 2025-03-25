@@ -24,8 +24,7 @@ export class CreateScentUsecase {
 
             }
         } catch (error) {
-            console.log(error);
-            throw new InternalServerErrorException()
+            throw new BadRequestException()
         }
 
     }

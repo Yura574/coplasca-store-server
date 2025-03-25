@@ -1,7 +1,6 @@
 import {clearDatabase, closeTest, initializeTestSetup, testApp} from '../../../../test-setup';
 import {AuthTestManager, userTestData} from '../../../testManagers/authTestManager';
 import {LoginOutputModel} from "../../../../src/features/auth/api/models/output/login.output.model";
-import {CategoryTestManagers} from "../../../testManagers/reference-data/categoryTestManagers";
 import {CategoryOutputModel} from "../../../../src/features/reference-data/api/models/output/allCategories.output.model";
 import {ScentTestManagers} from "../../../testManagers/reference-data/scentTestManagers";
 

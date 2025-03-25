@@ -1,9 +1,9 @@
 import {Controller, Get, Post, Req, UnauthorizedException, UseGuards} from "@nestjs/common";
 import {AuthGuard} from "../../../infrastructure/guards/auth.guard";
-import {NewCategoryInputModel} from "./models/input/newCategory.input.model";
 import {RequestType} from "../../1_commonTypes/commonTypes";
 import {CreateCategoryUsecase} from "../application/usecases/category/createCategory.usecase";
 import {GetAllCategoriesUsecase} from "../application/usecases/category/getAllCategories.usecase";
+import {NewCategoryInputModel} from "./models/input/newCategory.input.model";
 
 @Controller('category')
 export class CategoryController {

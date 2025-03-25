@@ -12,6 +12,7 @@ export class ScentRepository {
     }
 
     async createScent(data: CreateNewCategoryType) {
+        console.log(data)
         return await this.scentModel.create(data)
     }
 

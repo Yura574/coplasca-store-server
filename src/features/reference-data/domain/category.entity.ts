@@ -9,7 +9,7 @@ export type CategoryDocument = HydratedDocument<Category>
 @Schema()
 export class Category {
 
-    @Prop()
+    @Prop({ required: true })
     userId: string
 
     @Prop({required: true})
@@ -19,3 +19,4 @@ export class Category {
 
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
+CategorySchema.index({ userId: 1, title: 1 }, { unique: true });

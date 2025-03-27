@@ -13,15 +13,37 @@ export class GetSalesUsecase {
     }
 
     async getSales(userId: string, query: QueryGetSalesType): Promise<ReturnViewModel<SaleOutputModel[]>> {
-        const {pageSize = 10, pageNumber = 1, searchScentTerm, sortBy = 'createdAt', sortDirection} = query
+        const {pageSize = 10, pageNumber = 1, searchScentTerm, sortBy = 'createdAt', sortDirection, pointOfSale, scent, paymentMethod, category} = query
 
-        const searchQuery =
+        const searchQuery: any =
             searchScentTerm ? {
                 name: {$regex: new RegExp(searchScentTerm, 'i')},
                 userId
             } : {
             userId
             };
+        if (pointOfSale !== undefined && pointOfSale !== "") {
+            searchQuery.pointOfSale = pointOfSale;
+        }
+        if (scent !== undefined && scent !== "") {
+            searchQuery.saleDataInfo = {
+                $elemMatch: {
+                    scent: scent.trim(),
+                }
+            }
+        }
+        if (paymentMethod !== undefined && paymentMethod !== "") {
+            searchQuery.paymentMethod = paymentMethod;
+        }
+
+        if (category !== undefined && category !== "") {
+            searchQuery.saleDataInfo = {
+                $elemMatch: {
+                         category: category.trim(),
+                }
+            };
+        }
+
         const now = new Date();
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1-е число текущего месяца
         const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -32,7 +54,7 @@ export class GetSalesUsecase {
         const salesCount = await this.saleModel.countDocuments(searchQuery);
         const pagesCount = Math.ceil(salesCount / pageSize);
 
-        const sales = await this.saleModel.find({...searchQuery, createdAt: {$gte: startOfMonth, $lt: startOfNextMonth}, pointOfSale: ''}).sort(sort).skip(skip);
+        const sales = await this.saleModel.find({...searchQuery, createdAt: {$gte: startOfMonth, $lt: startOfNextMonth}}).sort(sort).skip(skip);
         const returnItems: SaleOutputModel[] = sales.map((sale: SaleDocument): SaleOutputModel => {
             return {
                 id: sale.id,

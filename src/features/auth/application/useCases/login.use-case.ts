@@ -40,7 +40,7 @@ export class LoginUseCase {
     };
     return {
       accessCookie: jwt.sign(accessPayload, process.env.ACCESS_SECRET as string, {expiresIn: '15m'}),
-      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, {expiresIn: '30d'})
+      refreshCookie: jwt.sign(refreshPayload, process.env.REFRESH_SECRET as string, {expiresIn: '30d', })
 
     };
   }

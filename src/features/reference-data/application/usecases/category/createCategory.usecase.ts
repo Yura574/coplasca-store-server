@@ -9,9 +9,9 @@ export class CreateCategoryUsecase {
     constructor(private categoryRepository: CategoryRepository) {
     }
 
-    async createCategory(userId: string, title: string): Promise<CategoryOutputModel | null> {
+    async createCategory(userId: string, title: string) {
         const findCategory = await this.categoryRepository.getCategoryByName(title);
-        if (findCategory) throw new BadRequestException([{
+        if (findCategory || !title) throw new BadRequestException([{
             message: 'Category already exists',
             field: 'category'
         }] as ErrorMessageType[]);
@@ -24,7 +24,7 @@ export class CreateCategoryUsecase {
             }
         } catch (error) {
             console.log(error);
-            throw new InternalServerErrorException()
+            throw new BadRequestException([{}])
         }
 
     }

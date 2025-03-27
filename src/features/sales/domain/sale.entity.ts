@@ -11,15 +11,12 @@ class SaleDataInfo {
 
     @Prop()
     scent: string
-
-
 }
 
 @Schema()
 export class Sale {
     @Prop()
     userId: string
-
 
     @Prop({ type: [SaleDataInfo], default: [],_id: false})
     @IsArray()

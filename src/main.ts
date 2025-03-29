@@ -7,6 +7,7 @@ import * as process from "node:process";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // app.useGlobalPipes(new ValidationPipe());
+  console.log(process.env)
   app.enableCors({
     origin: "https://coplasca.vercel.app",
     credentials: true

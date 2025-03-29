@@ -129,7 +129,7 @@ export class AuthController {
             accessToken: cookie.accessCookie
         };
 
-        res.cookie('refreshToken', cookie.refreshCookie, {httpOnly: true, secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 });
+        res.cookie('refreshToken', cookie.refreshCookie, {httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 });
         return accessToken;
     }
 

@@ -12,8 +12,7 @@ export type EnvironmentsTypes =
 export const Environments = ['DEVELOPMENT', 'STAGING', 'PRODUCTION', 'TESTING'];
 
 export class EnvironmentSettings {
-  constructor(private env: EnvironmentsTypes) {
-  }
+  constructor(private env: EnvironmentsTypes) {}
 
   getEnv() {
     return this.env;
@@ -37,11 +36,7 @@ export class EnvironmentSettings {
 }
 
 class AppSettings {
-  constructor(
-    public env: EnvironmentSettings,
-    public api: APISettings
-  ) {
-  }
+  constructor(public env: EnvironmentSettings, public api: APISettings) {}
 }
 
 class APISettings {
@@ -54,15 +49,18 @@ class APISettings {
 
   constructor(private readonly envVariables: EnvironmentVariable) {
     // Application
-    this.APP_PORT = this.getNumberOrDefault(this.envVariables.APP_PORT as string, 5000);
+    this.APP_PORT = this.getNumberOrDefault(
+      this.envVariables.APP_PORT as string,
+      5000,
+    );
 
     // Database
     this.MONGO_CONNECTION_URI =
       this.envVariables.MONGO_CONNECTION_URI ?? 'mongodb://localhost/nest';
     this.MONGO_CONNECTION_URI_FOR_DEVELOP =
-      this.envVariables.MONGO_CONNECTION_URI_FOR_DEVELOP ?? 'mongodb://localhost/test';
+      this.envVariables.MONGO_CONNECTION_URI_FOR_DEVELOP ??
+      'mongodb://localhost/test';
   }
-
 
   private getNumberOrDefault(value: string, defaultValue: number): number {
     const parsedValue = Number(value);
@@ -78,7 +76,7 @@ class APISettings {
 const env = new EnvironmentSettings(
   (Environments.includes((process.env.ENV as string)?.trim())
     ? (process.env.ENV as string).trim()
-    : 'DEVELOPMENT') as EnvironmentsTypes
+    : 'DEVELOPMENT') as EnvironmentsTypes,
 );
 
 const api = new APISettings(process.env);

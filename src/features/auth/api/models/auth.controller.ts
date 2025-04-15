@@ -79,7 +79,10 @@ export class AuthController {
   ): Promise<LoginOutputModel> {
     const { loginOrEmail, password } = body;
     console.log(body);
-    const cookie = await this.loginUseCase.execute(loginOrEmail.toLowerCase(), password);
+    const cookie = await this.loginUseCase.execute(
+      loginOrEmail.toLowerCase(),
+      password,
+    );
 
     const accessToken = {
       accessToken: cookie.accessCookie,

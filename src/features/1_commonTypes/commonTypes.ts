@@ -10,7 +10,7 @@ export type RequestType<P, B, Q> = Request<P, {}, B, Q> & { user?:UserType}
 
 export type QueryType = {
   pageNumber?: number
-  pageSize?: number
+  pageSize?: number | string
   sortBy?: string
   sortDirection?: 'asc' | 'desc'
 }

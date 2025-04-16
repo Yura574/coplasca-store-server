@@ -63,4 +63,30 @@ export class CreateNewSaleInputModel {
         return value.trim()
     })
     createdAt?: string
+
+    @IsOptional()
+    @IsString()
+    @Transform(({value}) => {
+        if (typeof value !== "string") {
+            throw new BadRequestException([{
+                message: 'Start date should be a Date',
+                field: 'Start date'
+            }] as ErrorMessageType[]);
+        }
+        return value.trim()
+    })
+    startDate?: string
+
+    @IsOptional()
+    @IsString()
+    @Transform(({value}) => {
+        if (typeof value !== "string") {
+            throw new BadRequestException([{
+                message: 'End date should be a Date',
+                field: 'End date'
+            }] as ErrorMessageType[]);
+        }
+        return value.trim()
+    })
+    endDate?: string
 }

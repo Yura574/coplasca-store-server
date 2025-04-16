@@ -7,4 +7,6 @@ export type QueryGetSalesType = QueryType & {
     scent: string
     paymentMethod: string
     pointOfSale: string
+    startDate: string
+    endDate: string
 }

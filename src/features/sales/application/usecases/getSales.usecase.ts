@@ -60,7 +60,7 @@ export class GetSalesUsecase {
 
     const now = new Date(startDate);
     console.log(endDate);
-    const end = endDate ? new Date(endDate): new Date()()
+    const end = endDate ? new Date(endDate): new Date()
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1-е число текущего месяца
     const startOfNextMonth = new Date(end.getFullYear(), end.getMonth() + 1, 1);
     const skip = (+pageNumber - 1) * +pageNumber;

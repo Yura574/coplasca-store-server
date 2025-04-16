@@ -52,7 +52,6 @@ export class SalesController {
         if (!userId) {
             throw new UnauthorizedException()
         }
-        console.log(req.query);
         return await this.getSalesUsecase.getSales(userId, req.query)
 
     }

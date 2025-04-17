@@ -63,13 +63,13 @@ export class GetSalesUsecase {
     const now = new Date(startDate);
     const end = endDate ? new Date(endDate): new Date()
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1-е число текущего месяца
-    const startOfNextMonth =endDate?  new Date(end.getFullYear(), end.getMonth() + 1, 1): new Date(end.getFullYear(), end.getMonth() + 1, 1);
+    const startOfNextMonth =endDate?  new Date(now.getFullYear(), now.getMonth()+1 , 1): new Date(end.getFullYear(), end.getMonth() + 1, 1);
     const skip = (+pageNumber - 1) * +pageNumber;
     const sort: any = {};
-
+    console.log(startOfMonth);
+    console.log(startOfNextMonth);
     sort[sortBy] = sortDirection === 'asc' ? 1 : -1;
 
-    console.log('query', searchQuery);
     const salesCount = await this.saleModel.countDocuments({
       ...searchQuery,
       createdAt: { $gte: startOfMonth, $lt: startOfNextMonth },
@@ -84,8 +84,8 @@ export class GetSalesUsecase {
       })
       .sort(sort)
       .skip(skip);
-
-    console.log(sales);
+const months = ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','декабрь' ]
+    console.log(months[new Date(startDate).getMonth()]);
 
     const returnItems: SaleOutputModel[] = sales.map(
       (sale: SaleDocument): SaleOutputModel => {
@@ -106,6 +106,7 @@ export class GetSalesUsecase {
       pageSize: !!+pageSize ? pageSize : 'unlimited',
       pagesCount,
       totalCount: salesCount,
+      filterValues: [],
       items: returnItems,
     };
   }

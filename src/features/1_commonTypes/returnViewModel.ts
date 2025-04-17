@@ -3,5 +3,6 @@ export type ReturnViewModel<T> = {
   page: number;
   pageSize: number | string;
   totalCount: number;
+  filterValues: string[];
   items: T | null;
 };

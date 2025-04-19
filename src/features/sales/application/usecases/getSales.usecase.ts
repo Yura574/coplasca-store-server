@@ -27,7 +27,9 @@ export class GetSalesUsecase {
       startDate = new Date(),
       endDate = '',
     } = query;
+
     if(startDate && endDate &&startDate > endDate) {throw new BadRequestException('Starting date more then ended date');}
+
     const searchQuery: any = searchScentTerm
       ? {
           name: { $regex: new RegExp(searchScentTerm, 'i') },
@@ -66,8 +68,6 @@ export class GetSalesUsecase {
     const startOfNextMonth =endDate?  new Date(now.getFullYear(), now.getMonth()+1 , 1): new Date(end.getFullYear(), end.getMonth() + 1, 1);
     const skip = (+pageNumber - 1) * +pageNumber;
     const sort: any = {};
-    console.log(startOfMonth);
-    console.log(startOfNextMonth);
     sort[sortBy] = sortDirection === 'asc' ? 1 : -1;
 
     const salesCount = await this.saleModel.countDocuments({
@@ -80,12 +80,13 @@ export class GetSalesUsecase {
     const sales = await this.saleModel
       .find({
         ...searchQuery,
+        userId,
         createdAt: { $gte: startOfMonth, $lt: startOfNextMonth },
       })
       .sort(sort)
       .skip(skip);
 const months = ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','декабрь' ]
-    console.log(months[new Date(startDate).getMonth()]);
+    console.log(sales);
 
     const returnItems: SaleOutputModel[] = sales.map(
       (sale: SaleDocument): SaleOutputModel => {

@@ -101,7 +101,7 @@ const referenceDataUsecases: Provider[] = [
       useFactory: async () => {
         let uri: string = '';
         if (appSettings.env.isDevelopment()) {
-          uri = appSettings.api.MONGO_CONNECTION_URI;
+          uri = appSettings.api.MONGO_CONNECTION_URI_FOR_DEVELOP;
         }
         if (appSettings.env.isProduction()) {
           uri = appSettings.api.MONGO_CONNECTION_URI;

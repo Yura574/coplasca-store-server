@@ -74,7 +74,7 @@ class APISettings {
     return parsedValue;
   }
 }
-
+console.log('process.env.ENV =', process.env.ENV);
 const env = new EnvironmentSettings(
   (Environments.includes((process.env.ENV as string)?.trim())
     ? (process.env.ENV as string).trim()

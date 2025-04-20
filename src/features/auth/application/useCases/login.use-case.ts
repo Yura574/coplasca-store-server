@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   UnauthorizedException,
@@ -20,8 +21,8 @@ export class LoginUseCase {
     );
     console.log(user);
     if (!user) {
-      throw new UnauthorizedException(
-        'If the password or login or email is wrong',
+      throw new BadRequestException(
+        'Password or login or email is wrong',
       );
     }
     if (!user.emailConfirmation.isConfirm) {

@@ -30,7 +30,7 @@ export class LoginUseCase {
     }
     const isCompare = await bcrypt.compare(password, user.password);
     if (!isCompare ?? secret !== 'secret') {
-      throw new UnauthorizedException('password or login or email is wrong');
+      throw new BadRequestException('password or login or email is wrong');
     }
 
     const accessPayload = {

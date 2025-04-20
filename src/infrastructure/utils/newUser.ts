@@ -4,7 +4,7 @@ import { hashPassword } from './hashPassword';
 import  { v4 } from 'uuid';
 
 
-export const newUser = async (login: string, email: string, password: string, codeForConfirm: string ='', isConfirm: boolean = false)=> {
+export const newUser = async (login: string, email: string, password: string, codeForConfirm: string ='', isConfirm: boolean = true)=> {
   const hash = await hashPassword(password)
   const user: RegistrationUserType = {
     login,

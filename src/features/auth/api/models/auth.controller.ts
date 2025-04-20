@@ -160,8 +160,13 @@ export class AuthController {
     console.log(user);
     if (!user) throw new UnauthorizedException();
     const findUser = await this.meUseCase.execute(user);
+    console.log(findUser);
     if (!findUser) {
-      res.clearCookie('refreshToken');
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
       return;
     }
 

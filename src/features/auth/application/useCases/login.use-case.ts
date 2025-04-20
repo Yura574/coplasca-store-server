@@ -14,27 +14,24 @@ import { FindUserType } from '../../../users/api/models/types/userType';
 export class LoginUseCase {
   constructor(private userRepository: UsersRepository) {}
 
-  async execute(loginOrEmail: string, password: string, secret?: string) {
+  async execute(loginOrEmail: string, password: string) {
     const user: FindUserType | null = await this.userRepository.findUser(
       loginOrEmail,
     );
-    console.log(user);
     if (!user) {
-      console.log(5555);
       throw new BadRequestException(
         'Password or login  is wrong',
       );
     }
     if (!user.emailConfirmation.isConfirm) {
-      console.log(123);
       throw new ForbiddenException('Confirmed our email');
     }
-    console.log(123);
+
     const isCompare = await bcrypt.compare(password, user!.password);
-    if (!isCompare ?? secret !== 'secret') {
+    if (!isCompare) {
       throw new BadRequestException('Password or login is wrong');
     }
-    console.log('is compare', isCompare);
+
     const accessPayload = {
       userId: user?._id.toString(),
       email: user?.email,

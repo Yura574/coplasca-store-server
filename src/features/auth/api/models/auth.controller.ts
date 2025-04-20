@@ -101,7 +101,11 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard)
   async logout(@Res({ passthrough: true }) res: Response): Promise<void> {
-    res.clearCookie('refreshToken');
+    res.clearCookie('refreshToken',{
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
   }
 
   @Post(authEndPoints.RECOVERY_PASSWORD)
@@ -112,12 +116,14 @@ export class AuthController {
 
   @Post(authEndPoints.NEW_PASSWORD)
   @HttpCode(HttpStatus.NO_CONTENT)
+
   async newPassword(@Body() body: NewPasswordInputModel) {
     return await this.newPasswordUseCase.execute(body);
   }
 
   @Post(authEndPoints.REGISTRATION_EMAIL_RESENDING)
   @HttpCode(HttpStatus.NO_CONTENT)
+
   async resendingEmail(@Body() body: ResendingEmailInputModel) {
     return await this.resendingEmailUseCase.execute(body.email);
   }
@@ -125,6 +131,7 @@ export class AuthController {
   @UseGuards(RefreshTokenGuard)
   @Post(authEndPoints.REFRESH_TOKEN)
   @HttpCode(HttpStatus.OK)
+
   async refreshToken(
     @Req() req: RequestType<{}, {}, {}>,
     @Res({ passthrough: true }) res: Response,

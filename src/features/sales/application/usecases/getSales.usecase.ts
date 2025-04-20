@@ -50,7 +50,6 @@ export class GetSalesUsecase {
     }
 
     if (paymentMethod !== undefined && paymentMethod !== '') {
-      console.log('paymentMethod', paymentMethod);
       searchQuery.paymentMethod = paymentMethod;
     }
 
@@ -86,7 +85,7 @@ export class GetSalesUsecase {
       .sort(sort)
       .skip(skip);
 const months = ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','декабрь' ]
-    console.log(sales);
+    console.log(months[new Date(startDate).getMonth()]);
 
     const returnItems: SaleOutputModel[] = sales.map(
       (sale: SaleDocument): SaleOutputModel => {

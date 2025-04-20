@@ -15,7 +15,6 @@ export class EnvironmentSettings {
   constructor(private env: EnvironmentsTypes) {}
 
   getEnv() {
-    console.log(process.env.NODE_ENV);
     return this.env;
   }
 
@@ -28,7 +27,6 @@ export class EnvironmentSettings {
   }
 
   isDevelopment() {
-    console.log(process.env.NODE_ENV);
     return this.env === 'DEVELOPMENT';
   }
 
@@ -74,7 +72,6 @@ class APISettings {
     return parsedValue;
   }
 }
-console.log('process.env.ENV =', process.env.ENV);
 const env = new EnvironmentSettings(
   (Environments.includes((process.env.ENV as string)?.trim())
     ? (process.env.ENV as string).trim()

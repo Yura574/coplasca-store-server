@@ -34,7 +34,6 @@ export class UserController {
 
   @Get()
   async getUsers(@Req() req: Request): Promise<ReturnViewModel<UserType[]>> {
-    console.log('process.env.ENV =', process.env.ENV);
     return await this.usersQueryRepository.getUsers(req.query);
   }
 

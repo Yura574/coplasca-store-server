@@ -31,7 +31,6 @@ export class SaleRepository {
 
     async deleteSale(saleId: string) {
         const sale = await this.saleModel.findOne({id: saleId})
-        console.log(sale)
         return this.saleModel.deleteOne({_id: saleId});
     }
 }

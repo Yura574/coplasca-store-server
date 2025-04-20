@@ -11,7 +11,6 @@ export class CategoryRepository {
     }
 
     async createCategory(data: CreateNewCategoryType) {
-        console.log(data)
         return await this.categoryModel.create(data)
     }
 

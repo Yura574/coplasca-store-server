@@ -14,9 +14,11 @@ export class LoginUseCase {
   constructor(private userRepository: UsersRepository) {}
 
   async execute(loginOrEmail: string, password: string, secret?: string) {
+    console.log('loginOrEmail', loginOrEmail, password);
     const user: FindUserType | null = await this.userRepository.findUser(
       loginOrEmail,
     );
+    console.log(user);
     if (!user) {
       throw new UnauthorizedException(
         'If the password or login or email is wrong',
@@ -26,7 +28,6 @@ export class LoginUseCase {
       throw new ForbiddenException('Confirmed our email');
     }
     const isCompare = await bcrypt.compare(password, user.password);
-    console.log(isCompare);
     if (!isCompare ?? secret !== 'secret') {
       throw new UnauthorizedException('password or login or email is wrong');
     }

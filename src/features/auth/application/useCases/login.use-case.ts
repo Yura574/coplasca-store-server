@@ -20,7 +20,7 @@ export class LoginUseCase {
     );
     if (!user) {
       throw new BadRequestException(
-        'Password2 or login  is wrong',
+        {user},
       );
     }
     console.log(user);

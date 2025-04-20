@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { validationError } from '../infrastructure/utils/validationError';
 import { useContainer } from 'class-validator';
 import { AppModule } from '../app.module';
+import * as express from 'express';
 
 export const applyAppSetting = (app: INestApplication) => {
   // app.useGlobalInterceptors(new Logging)
@@ -12,6 +13,7 @@ export const applyAppSetting = (app: INestApplication) => {
   // app.useGlobalGuards(new AuthGuard())
   app.use(cookieParser());
 
+  app.use(express.json())
 
   useContainer(app.select(AppModule), {fallbackOnErrors: true})
   app.useGlobalPipes(new ValidationPipe({

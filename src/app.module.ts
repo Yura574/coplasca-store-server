@@ -53,6 +53,7 @@ import {
   Scent,
   ScentSchema,
 } from './features/reference-data/domain/scent.entity';
+import { MeUseCase } from './features/auth/application/useCases/me.use-case';
 
 const usersProviders: Provider[] = [
   UsersRepository,
@@ -73,6 +74,7 @@ const authUseCases: Provider[] = [
   NewPasswordUseCase,
   ResendingEmailUseCase,
   RefreshTokenUseCase,
+  MeUseCase,
 ];
 
 const saleUsecases: Provider[] = [

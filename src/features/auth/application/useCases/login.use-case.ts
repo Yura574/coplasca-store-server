@@ -15,34 +15,36 @@ export class LoginUseCase {
   constructor(private userRepository: UsersRepository) {}
 
   async execute(loginOrEmail: string, password: string, secret?: string) {
-    console.log('loginOrEmail', loginOrEmail, password);
     const user: FindUserType | null = await this.userRepository.findUser(
       loginOrEmail,
     );
     console.log(user);
     if (!user) {
+      console.log(5555);
       throw new BadRequestException(
-        'Password or login or email is wrong',
+        'Password or login  is wrong',
       );
     }
     if (!user.emailConfirmation.isConfirm) {
+      console.log(123);
       throw new ForbiddenException('Confirmed our email');
     }
-    const isCompare = await bcrypt.compare(password, user.password);
+    console.log(123);
+    const isCompare = await bcrypt.compare(password, user!.password);
     if (!isCompare ?? secret !== 'secret') {
-      throw new BadRequestException('password or login or email is wrong');
+      throw new BadRequestException('Password or login is wrong');
     }
-
+    console.log('is compare', isCompare);
     const accessPayload = {
-      userId: user._id.toString(),
-      email: user.email,
-      login: user.login,
+      userId: user?._id.toString(),
+      email: user?.email,
+      login: user?.login,
       deviceId: v4(),
     };
     const refreshPayload = {
-      userId: user._id.toString(),
-      email: user.email,
-      login: user.login,
+      userId: user?._id.toString(),
+      email: user?.email,
+      login: user?.login,
       deviceId: v4(),
     };
     return {

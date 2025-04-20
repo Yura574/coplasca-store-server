@@ -30,6 +30,7 @@ import { UserViewModel } from '../../../users/api/models/output/createdUser.outp
 import { ResendingEmailUseCase } from '../../application/useCases/resendingEmail.use-case';
 import { RefreshTokenGuard } from '../../../../infrastructure/guards/refreshToken.guard';
 import { RefreshTokenUseCase } from '../../application/useCases/refreshToken.use-case';
+import { MeUseCase } from '../../application/useCases/me.use-case';
 
 export enum authEndPoints {
   BASE = 'auth',
@@ -55,6 +56,7 @@ export class AuthController {
     private newPasswordUseCase: NewPasswordUseCase,
     private resendingEmailUseCase: ResendingEmailUseCase,
     private refreshTokenUseCase: RefreshTokenUseCase,
+    private meUseCase: MeUseCase,
   ) {}
 
   @Post(authEndPoints.REGISTRATION)
@@ -101,7 +103,7 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard)
   async logout(@Res({ passthrough: true }) res: Response): Promise<void> {
-    res.clearCookie('refreshToken',{
+    res.clearCookie('refreshToken', {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
@@ -116,14 +118,12 @@ export class AuthController {
 
   @Post(authEndPoints.NEW_PASSWORD)
   @HttpCode(HttpStatus.NO_CONTENT)
-
   async newPassword(@Body() body: NewPasswordInputModel) {
     return await this.newPasswordUseCase.execute(body);
   }
 
   @Post(authEndPoints.REGISTRATION_EMAIL_RESENDING)
   @HttpCode(HttpStatus.NO_CONTENT)
-
   async resendingEmail(@Body() body: ResendingEmailInputModel) {
     return await this.resendingEmailUseCase.execute(body.email);
   }
@@ -131,7 +131,6 @@ export class AuthController {
   @UseGuards(RefreshTokenGuard)
   @Post(authEndPoints.REFRESH_TOKEN)
   @HttpCode(HttpStatus.OK)
-
   async refreshToken(
     @Req() req: RequestType<{}, {}, {}>,
     @Res({ passthrough: true }) res: Response,
@@ -155,9 +154,16 @@ export class AuthController {
 
   @UseGuards(RefreshTokenGuard)
   @Get(authEndPoints.ME)
-  async me(@Req() req: RequestType<{}, {}, {}>) {
+  async me(@Req() req: RequestType<{}, {}, {}>,
+           @Res({ passthrough: true }) res: Response,) {
     const user = req.user;
+    console.log(user);
     if (!user) throw new UnauthorizedException();
+    const findUser = await this.meUseCase.execute(user);
+    if (!findUser) {
+      res.clearCookie('refreshToken');
+      return;
+    }
 
     return user;
   }

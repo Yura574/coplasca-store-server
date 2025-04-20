@@ -1,5 +1,5 @@
 import { Request } from 'express';
-type UserType = {
+export type UserType = {
   userId: string
   email: string
   login: string

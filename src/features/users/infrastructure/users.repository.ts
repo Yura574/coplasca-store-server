@@ -42,8 +42,8 @@ export class UsersRepository {
 
     return  this.userModel.findOne({
       $or: [
-        { login: { $regex: emailOrLogin } },
-        { email: { $regex: emailOrLogin } }
+        { login: emailOrLogin.toLowerCase() },
+        { email: emailOrLogin.toLowerCase() }
       ]
     });
   }

@@ -7,8 +7,8 @@ import  { v4 } from 'uuid';
 export const newUser = async (login: string, email: string, password: string, codeForConfirm: string ='', isConfirm: boolean = true)=> {
   const hash = await hashPassword(password)
   const user: RegistrationUserType = {
-    login,
-    email,
+    login: login.toLowerCase(),
+    email: email.toLowerCase(),
     password: hash,
     createdAt: new Date().toISOString(),
     emailConfirmation: {

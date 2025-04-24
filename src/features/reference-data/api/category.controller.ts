@@ -16,7 +16,6 @@ export class CategoryController {
     @UseGuards(AuthGuard)
     @Post()
     async createCategory(@Req() req: RequestType<{}, NewCategoryInputModel, {}>) {
-        // console.log(req.body)
         if (!req.user) throw new UnauthorizedException("User not found");
 
         return await this.createCategoryUseCase.createCategory(req.user.userId, req.body.title)

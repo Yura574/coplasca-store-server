@@ -36,7 +36,6 @@ describe('test for POST sales', () => {
         expect(res.title).toBe('нектар лунного цветка')
 
         const res2 = await scentTestManager.getAllScents(token)
-        console.log(res2)
         expect(res2.length).toBe(4)
     });
 

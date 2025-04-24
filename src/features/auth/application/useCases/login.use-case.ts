@@ -19,22 +19,17 @@ export class LoginUseCase {
       loginOrEmail,
     );
     if (!user) {
-      console.log(user);
       throw new BadRequestException(
         'Password2 or login  is wrong',
       );
     }
-    console.log(user);
 
     if (!user.emailConfirmation.isConfirm) {
       throw new ForbiddenException('Confirmed our email');
     }
-    console.log('1', await bcrypt.compare(password, user.password));
-    console.log('2', await bcrypt.compare(user.password, password));
 
     const isCompare = await bcrypt.compare(password, user.password);
-    console.log(isCompare);
-    if (!isCompare) {
+      if (!isCompare) {
       throw new BadRequestException('Password1 or login is wrong');
     }
 

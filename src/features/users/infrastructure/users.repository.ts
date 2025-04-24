@@ -4,33 +4,42 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../domain/user.entity';
 import { UserViewModel } from '../api/models/output/createdUser.output.model';
 import { ErrorMessageType } from '../../../infrastructure/exception-filters/exeptions';
-import { EmailConfirmationType, FindUserType, RegistrationUserType } from '../api/models/types/userType';
+import {
+  EmailConfirmationType,
+  FindUserType,
+  RegistrationUserType,
+} from '../api/models/types/userType';
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {
-  }
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async createUser(dto: RegistrationUserType): Promise<UserViewModel> {
-
     try {
       const createdUser = await this.userModel.create(dto);
       const user = await createdUser.save();
       const { id, email, login, createdAt } = user;
-      return { id, login, email , createdAt};
+      return { id, login, email, createdAt };
     } catch (err) {
-      throw new HttpException('Login or email already exist', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Login or email already exist',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
   async uniqueUser(login: string, email: string) {
     const errors: ErrorMessageType[] = [];
-    const userEmail = await this.userModel.findOne({ email: { $regex: email } });
+    const userEmail = await this.userModel.findOne({
+      email: { $regex: email },
+    });
     if (userEmail) {
       errors.push({ field: 'email', message: 'email already exist' });
     }
 
-    const userLogin = await this.userModel.findOne({ login: { $regex: login } });
+    const userLogin = await this.userModel.findOne({
+      login: { $regex: login },
+    });
     if (userLogin) {
       errors.push({ field: 'login', message: 'login already exist' });
     }
@@ -39,20 +48,25 @@ export class UsersRepository {
   }
 
   async findUser(emailOrLogin: string) {
-
-    return  this.userModel.findOne({
+    return this.userModel.findOne({
       $or: [
         { login: emailOrLogin.toLowerCase() },
-        { email: emailOrLogin.toLowerCase() }
-      ]
+        { email: emailOrLogin.toLowerCase() },
+      ],
     });
   }
 
-  async updateEmailConfirmationUser(email: string, emailConfirmation: EmailConfirmationType) {
+  async updateEmailConfirmationUser(
+    email: string,
+    emailConfirmation: EmailConfirmationType,
+  ) {
     const user: FindUserType | null = await this.findUser(email);
-    return this.userModel.updateOne({ email: user?.email }, {
-      emailConfirmation: emailConfirmation
-    });
+    return this.userModel.updateOne(
+      { email: user?.email },
+      {
+        emailConfirmation: emailConfirmation,
+      },
+    );
   }
 
   async updatePasswordUser(password: string, email: string) {
@@ -60,7 +74,6 @@ export class UsersRepository {
   }
 
   async deleteUser(id: string) {
-      return   this.userModel.deleteOne({ _id: id });
+    return this.userModel.deleteOne({ _id: id });
   }
-
 }

@@ -22,7 +22,6 @@ export class ScentController {
                       ) {
         // console.log(req.body)
         if (!req.user) throw new UnauthorizedException("User not found");
-        console.log(req.body)
         return await this.createScentUseCase.createScent(req.user.userId, req.body.title)
     }
 

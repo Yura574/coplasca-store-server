@@ -80,7 +80,6 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<LoginOutputModel> {
     const { loginOrEmail, password } = body;
-    console.log(body);
     const cookie = await this.loginUseCase.execute(
       loginOrEmail.toLowerCase(),
       password,
@@ -157,10 +156,8 @@ export class AuthController {
   async me(@Req() req: RequestType<{}, {}, {}>,
            @Res({ passthrough: true }) res: Response,) {
     const user = req.user;
-    console.log(user);
     if (!user) throw new UnauthorizedException();
     const findUser = await this.meUseCase.execute(user);
-    console.log(findUser);
     if (!findUser) {
       res.clearCookie('refreshToken', {
         httpOnly: true,

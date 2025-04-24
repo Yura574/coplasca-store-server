@@ -24,12 +24,23 @@ export class GetSalesUsecase {
       scent,
       paymentMethod,
       category,
-      startDate = new Date(),
-      endDate = '',
+      startDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1,
+      ).toISOString(),
+      endDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        0,
+      ).toISOString(),
     } = query;
 
-    if(startDate && endDate &&startDate > endDate) {throw new BadRequestException('Starting date more then ended date');}
+    console.log(endDate);
 
+    if (startDate && endDate && startDate > endDate) {
+      throw new BadRequestException('Starting date more then ended date');
+    }
     const searchQuery: any = searchScentTerm
       ? {
           name: { $regex: new RegExp(searchScentTerm, 'i') },
@@ -62,9 +73,10 @@ export class GetSalesUsecase {
     }
 
     const now = new Date(startDate);
-    const end = endDate ? new Date(endDate): new Date()
+
+    const end = endDate ? new Date(endDate) : new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1-е число текущего месяца
-    const startOfNextMonth =endDate?  new Date(now.getFullYear(), now.getMonth()+1 , 1): new Date(end.getFullYear(), end.getMonth() + 1, 1);
+    const startOfNextMonth = endDate ? new Date(endDate) : new Date(end.getFullYear(), end.getMonth() + 1, 0);
     const skip = (+pageNumber - 1) * +pageNumber;
     const sort: any = {};
     sort[sortBy] = sortDirection === 'asc' ? 1 : -1;
@@ -80,12 +92,56 @@ export class GetSalesUsecase {
       .find({
         ...searchQuery,
         userId,
-        createdAt: { $gte: startOfMonth, $lt: startOfNextMonth },
+        createdAt: { $gte: startOfMonth, $lte: startOfNextMonth },
       })
       .sort(sort)
       .skip(skip);
-const months = ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','декабрь' ]
-    console.log(months[new Date(startDate).getMonth()]);
+    const months = [
+      'января',
+      'февраля',
+      'марта',
+      'апреля',
+      'мая',
+      'июня',
+      'июля',
+      'августа',
+      'сентября',
+      'октября',
+      'декабря',
+    ];
+    const wholeMonths = [
+      'январь',
+      'февраль',
+      'март',
+      'апрель',
+      'май',
+      'июнь',
+      'июль',
+      'август',
+      'сентябрь',
+      'октябрь',
+      'декабрь',
+    ];
+    // console.log(new Date(startDate).getDate());
+    const filterValues: any = {};
+
+
+    if (
+      new Date(startDate).getDate() === startOfMonth.getDate() &&
+      new Date(endDate).getDate() === startOfNextMonth.getDate()
+    ) {
+      filterValues.date = wholeMonths[new Date(startDate).getMonth()];
+    } else {
+      const startDateFilter =
+        new Date(startDate).getDate() +
+        ' ' +
+        months[new Date(startDate).getMonth()];
+
+      const endDateFilter =
+        new Date(end).getDate() + ' ' + months[new Date(end).getMonth()];
+
+      filterValues.date = startDateFilter + ' - ' + endDateFilter;
+    }
 
     const returnItems: SaleOutputModel[] = sales.map(
       (sale: SaleDocument): SaleOutputModel => {
@@ -106,7 +162,7 @@ const months = ['январь','февраль','март','апрель','ма�
       pageSize: !!+pageSize ? pageSize : 'unlimited',
       pagesCount,
       totalCount: salesCount,
-      filterValues: [],
+      filterValues,
       items: returnItems,
     };
   }

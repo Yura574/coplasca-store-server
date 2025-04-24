@@ -46,7 +46,6 @@ export class RegistrationUseCase {
       password,
       codeForConfirm,
     );
-    console.log(user);
     return await this.userRepository.createUser(user);
   }
 }

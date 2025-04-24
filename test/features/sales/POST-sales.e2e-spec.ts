@@ -45,7 +45,6 @@ describe('test for POST sales', () => {
         }
 
         const res: SaleOutputModel = await salesTestManagers.createSales(token, dto)
-        console.log(res)
         expect(res.saleDataInfo.length).toBe(3)
 
     });

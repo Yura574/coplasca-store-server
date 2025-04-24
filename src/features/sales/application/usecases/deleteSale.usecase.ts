@@ -12,7 +12,6 @@ export class DeleteSaleUsecase {
         if (!Types.ObjectId.isValid(saleId)) throw new NotFoundException();
 
         const res = await this.saleRepository.deleteSale(saleId)
-        console.log(res)
         if (res.deletedCount === 0) throw new NotFoundException();
 
         return res

@@ -166,7 +166,6 @@ export class AuthController {
       });
       return;
     }
-
     return user;
   }
 }

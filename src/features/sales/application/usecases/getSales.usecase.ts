@@ -5,6 +5,7 @@ import { QueryGetSalesType } from '../../api/models/types/querySalesType';
 import { InjectModel } from '@nestjs/mongoose';
 import { Sale, SaleDocument } from '../../domain/sale.entity';
 import { Model } from 'mongoose';
+import { TZDate } from "@date-fns/tz";
 
 @Injectable()
 export class GetSalesUsecase {
@@ -24,19 +25,10 @@ export class GetSalesUsecase {
       scent,
       paymentMethod,
       category,
-      startDate = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        1,
-      ).toISOString(),
-      endDate = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth() + 1,
-        0,
-      ).toISOString(),
+      startDate = new Date().toISOString(),
+      endDate = ''
     } = query;
 
-    console.log(endDate);
 
     if (startDate && endDate && startDate > endDate) {
       throw new BadRequestException('Starting date more then ended date');
@@ -73,10 +65,14 @@ export class GetSalesUsecase {
     }
 
     const now = new Date(startDate);
-
+    const now1 = new Date(Date.UTC(now.getFullYear(), now.getMonth(), 1));
+    console.log(now1.toISOString());
     const end = endDate ? new Date(endDate) : new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1-е число текущего месяца
+    // console.log('start month', startOfMonth);
     const startOfNextMonth = endDate ? new Date(endDate) : new Date(end.getFullYear(), end.getMonth() + 1, 0);
+    const laterDate = new TZDate(2025, 3, 25,  );
+    console.log(laterDate);
     const skip = (+pageNumber - 1) * +pageNumber;
     const sort: any = {};
     sort[sortBy] = sortDirection === 'asc' ? 1 : -1;

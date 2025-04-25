@@ -40,7 +40,6 @@ export class SalesController {
         if (!user) {
             throw new UnauthorizedException()
         }
-        console.log(dto);
         const saleId: string = await this.createSaleUsecase.createSale(user.userId, dto)
         return await this.getSaleByIdUsecase.getSaleById(saleId)
     }
@@ -48,13 +47,11 @@ export class SalesController {
 
     @UseGuards(AuthGuard)
     @Get()
-    async getSales(@Req() req: RequestType<{}, {}, QueryGetSalesType>,
-                   @Query() query: { date: string; timeZone: string }): Promise<ReturnViewModel<SaleOutputModel[]>> {
+    async getSales(@Req() req: RequestType<{}, {}, QueryGetSalesType>): Promise<ReturnViewModel<SaleOutputModel[]>> {
         const userId = req.user?.userId;
         if (!userId) {
             throw new UnauthorizedException()
         }
-      console.log('query', query);
         return await this.getSalesUsecase.getSales(userId, req.query)
 
     }

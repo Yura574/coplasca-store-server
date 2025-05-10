@@ -2,7 +2,7 @@ import { IsEmail, IsString, Length, Matches, Max, Min } from 'class-validator';
 
 export class UserInputModel {
   @IsString()
-  @Length(3, 10)
+  @Length(3, 30)
   @Matches(/^[a-zA-Z0-9_-]*$/, {
     message: 'name must contain only letters, numbers, underscores, or dashes',
   })

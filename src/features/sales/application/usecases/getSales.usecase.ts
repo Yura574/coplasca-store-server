@@ -25,10 +25,11 @@ export class GetSalesUsecase {
       scent,
       paymentMethod,
       category,
-      startDate = new Date().toISOString(),
-      endDate = ''
+      startDate = new Date(),
+      endDate = new Date()
     } = query;
 
+    // console.log('query', query);
 
     if (startDate && endDate && startDate > endDate) {
       throw new BadRequestException('Starting date more then ended date');
@@ -65,14 +66,15 @@ export class GetSalesUsecase {
     }
 
     const now = new Date(startDate);
+    console.log(new Date(now.getFullYear(), now.getMonth(), 1));
     const now1 = new Date(Date.UTC(now.getFullYear(), now.getMonth(), 1));
-    console.log(now1.toISOString());
+    // console.log(now1.toISOString());
     const end = endDate ? new Date(endDate) : new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1-е число текущего месяца
-    // console.log('start month', startOfMonth);
-    const startOfNextMonth = endDate ? new Date(endDate) : new Date(end.getFullYear(), end.getMonth() + 1, 0);
-    const laterDate = new TZDate(2025, 3, 25,  );
-    console.log(laterDate);
+    const startOfMonth = new Date(startDate)
+    console.log('start month', startOfMonth);
+    const startOfNextMonth = new Date(`${endDate}T23:59:59.999`)
+
+    // console.log(laterDate);
     const skip = (+pageNumber - 1) * +pageNumber;
     const sort: any = {};
     sort[sortBy] = sortDirection === 'asc' ? 1 : -1;
@@ -83,7 +85,7 @@ export class GetSalesUsecase {
     });
 
     const pagesCount = !!+pageSize ? Math.ceil(salesCount / +pageSize) : 1;
-
+    // console.log(startOfMonth);
     const sales = await this.saleModel
       .find({
         ...searchQuery,

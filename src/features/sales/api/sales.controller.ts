@@ -40,6 +40,7 @@ export class SalesController {
         if (!user) {
             throw new UnauthorizedException()
         }
+      // console.log('create controller', dto);
         const saleId: string = await this.createSaleUsecase.createSale(user.userId, dto)
         return await this.getSaleByIdUsecase.getSaleById(saleId)
     }
@@ -52,6 +53,7 @@ export class SalesController {
         if (!userId) {
             throw new UnauthorizedException()
         }
+      console.log(req.query);
         return await this.getSalesUsecase.getSales(userId, req.query)
 
     }

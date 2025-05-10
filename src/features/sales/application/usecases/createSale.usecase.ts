@@ -12,6 +12,7 @@ export class CreateSaleUsecase {
     }
 
     async createSale(userId: string, dto: CreateNewSaleInputModel) {
+      // console.log(dto);
         const newSale = new CreateNewSale(userId, dto)
         const sale: HydratedDocument<SaleDocument> = await this.saleRepository.createSale(newSale)
         return sale.id

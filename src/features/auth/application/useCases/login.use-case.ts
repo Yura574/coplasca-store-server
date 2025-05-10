@@ -20,7 +20,7 @@ export class LoginUseCase {
     );
     if (!user) {
       throw new BadRequestException(
-        'Password2 or login  is wrong',
+        'Password or login  is wrong',
       );
     }
 
@@ -30,7 +30,7 @@ export class LoginUseCase {
 
     const isCompare = await bcrypt.compare(password, user.password);
       if (!isCompare) {
-      throw new BadRequestException('Password1 or login is wrong');
+      throw new BadRequestException('Password or login is wrong');
     }
 
     const accessPayload = {
